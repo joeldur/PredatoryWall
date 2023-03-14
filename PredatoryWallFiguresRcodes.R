@@ -20,23 +20,14 @@ BSdataModel
 
 # Models
 require(mgcv)
-NSGAMmodel <- gam(list(LonHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re"),
-                       LatHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re")),
+NSGAMmodel <- gam(list(LonHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size, bs = "re")+s(Year, bs = "re"),
+                       LatHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size, bs = "re")+s(Year, bs = "re")),
                        data=NSdataModelCentre,correlation=corGaus(form=~(CenLon+CenLat)|f_Year), family = mvn(d = 2), method= "REML")
-# cov matrix
-solve(crossprod(NSGAMmodel$family$data$R))
-#             [,1]        [,2]
-#[1,]  0.38290526 -0.04959856
-#[2,] -0.04959856  0.40059985
 
-BSGAMmodel <- gam(list(LonHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re"),
-                       LatHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re")),
+
+BSGAMmodel <- gam(list(LonHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size, bs = "re")+s(Year, bs = "re"),
+                       LatHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size, bs = "re")+s(Year, bs = "re")),
                        data=BSdataModelCentre,correlation=corGaus(form=~(CenLon+CenLat)|f_Year), family = mvn(d = 2), method= "REML")
-# cov matrix
-solve(crossprod(BSGAMmodel$family$data$R))
-#           [,1]       [,2]
-#[1,]  0.5211996 -0.3108293
-#[2,] -0.3108293  0.2609086
 
 
 # Figure 2
