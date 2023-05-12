@@ -8,7 +8,7 @@ require(MASS)
 
 # Variables in the data frame “dataBS” here for the Barents Sea
 # "Year"     "Strata"   "CenLat"   "CenLon"   "Size"     "Nhad"    "Ncod"     "LatHad"   "LonHad"
-#  "LatCod"   "LonCod"   "ST"  "f_Year"  
+#  "LatCod"   "LonCod"   "ST"  "f_Year"  "f_Size" 
 # with f_Year Year factor transformed variable needed for the corGaus() term.
 # Nhad and Ncod are z-score abundances
 # CenLat and CenLon are the centre of gravity for the different sub-area
@@ -21,9 +21,9 @@ require(MASS)
 # GAM model used
 GAMmodel <- 
 gam(list(LonHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+
-                  s(Nhad,k=3, bs="ts")+s(Size,k=3, bs="re")+s(Year,k=3, bs = "re"),
+                  s(Nhad,k=3, bs="ts")+s(f_Size,k=3, bs="re")+s(f_Year,k=3, bs = "re"),
          LatHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+s(ST,k=3, bs="ts")+
-                  s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re")),
+                  s(Nhad,k=3, bs="ts")+s(f_Size,k=3, bs = "re")+s(f_Year,k=3, bs = "re")),
    data=dataBS, 
    correlation=corGaus(form=~(CenLon+CenLat)|f_Year), 
    family = mvn(d = 2), method= "REML")
@@ -43,7 +43,7 @@ newdataBS <- data.frame(Ncod=median(dataBS$Ncod),
                                            Nhad=median(dataBS $Nhad,na.rm=T),
                                            CenLon= median(dataBS $CenLon,na.rm=T),  
                                            CenLat= median(dataBS $CenLat,na.rm=T),   
-                                           Size=NA, Year=NA,  f_Year=NA)
+                                           Size=NA, Year=NA,  f_Year=NA, f_Size=NA)
 # SizeVal is a 100 values long list of the relative haddock abundance for each size category 
 # E.g. size 10cm corresponds to 27% of the haddocks, SizeVal contains then 27 times size 10.
 for (Si in 1:100){ # size category 
@@ -55,6 +55,7 @@ for (Si in 1:100){ # size category
         newdataBS$LatCod <- latBS[lat]
         newdataBS$f_Year  <- as.factor(yr)
         newdataBS$Size      <- SizeVal[Si]
+        newdataBS$f_Size    <- as.factor(SizeVal[Si])
         newdataBS$Year     <- yr
  # predict of the first part of the model -> Longitude
        predLon <- predict(GAMmodel, newdataBS)[1]      
