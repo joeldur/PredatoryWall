@@ -109,7 +109,7 @@ windows(5,5)
  require(MASS)
 
 # Barents Sea
-filled.contour(BSzBoot,  xlim=c(12,40),ylim=c(68,80), nlevels = 100,
+NoLeg.filled.contour(BSzBoot,  xlim=c(12,40),ylim=c(68,80), nlevels = 100,
            color.palette = function(n) c("#FFFFFF",rev(hcl.colors(n, "Blues"))),  
            plot.axes = {axis(1, seq(15,35,5), labels=expression(15~degree~E,20~degree~E,25~degree~E,30~degree~E,35~degree~E),tcl=-0.5)
                         axis(2, seq(70,80,2), labels=expression(70~degree~N,72~degree~N,74~degree~N,76~degree~N,78~degree~N,80~degree~N), tcl=-0.5)
@@ -118,7 +118,7 @@ filled.contour(BSzBoot,  xlim=c(12,40),ylim=c(68,80), nlevels = 100,
 
 
 # North Sea
-filled.contour(NSzBoot,  xlim=c(-3,11),ylim=c(49,61),  
+NoLeg.filled.contour(NSzBoot,  xlim=c(-3,11),ylim=c(49,61),  
                      plot.axes={axis(1, seq(-2,10,2), labels=expression(2~degree~W,0~degree~E,2~degree~E,4~degree~E,6~degree~E,8~degree~E,10~degree~E),tcl=-0.5)
                                axis(2, seq(50,60,2), labels=expression(50~degree~N,52~degree~N,54~degree~N,56~degree~N,58~degree~N,60~degree~N), tcl=-0.5)
                      polygon(NorthMAP $x,NorthMAP$y,col="grey",lwd=1)},
@@ -127,14 +127,14 @@ filled.contour(NSzBoot,  xlim=c(-3,11),ylim=c(49,61),
 
 #### Supplementary
 # Variograme
+windows2(1,2)
+  plot(BSVario1$dist,BSVario1$gamma, main="Longitude", ylim=c(0,1), xlab="distance",ylab="semivariance", col="blue")
+  plot(BSVario2$dist,BSVario2$gamma, main="Latitude", ylim=c(0,1), xlab="distance",ylab="semivariance", col="blue")
+
 
 windows2(1,2)
   plot(NSVario1$dist,NSVario1$gamma, main="Longitude", ylim=c(0,1), xlab="distance",ylab="semivariance", col="blue")
   plot(NSVario2$dist,NSVario2$gamma, main="Latitude", ylim=c(0,1), xlab="distance",ylab="semivariance", col="blue")
-
-windows2(1,2)
-  plot(BSVario1$dist,BSVario1$gamma, main="Longitude", ylim=c(0,1), xlab="distance",ylab="semivariance", col="blue")
-  plot(BSVario2$dist,BSVario2$gamma, main="Latitude", ylim=c(0,1), xlab="distance",ylab="semivariance", col="blue")
 
 
 
