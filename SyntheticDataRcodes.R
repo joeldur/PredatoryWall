@@ -1,6 +1,6 @@
 #### Synthetics data to simulate the process and test the model
-#### gam(list(LonH ~ s(Ncod,k=3, bs="ts")+te(LonC,LatC, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re"),
-####          LatH ~ s(Ncod,k=3, bs="ts")+te(LonC,LatC, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re")),
+#### gam(list(LonH ~ s(Ncod,k=3, bs="ts")+te(LonC,LatC, bs="ts")+s(Nhad,k=3, bs="ts")+s(f_Size,k=3, bs = "re")+s(f_Year,k=3, bs = "re"),
+####          LatH ~ s(Ncod,k=3, bs="ts")+te(LonC,LatC, bs="ts")+s(Nhad,k=3, bs="ts")+s(f_Size,k=3, bs = "re")+s(f_Year,k=3, bs = "re")),
 ####                 data=mgcvDATA,correlation=corGaus(form=~(CenLon+CenLat)|f_Year), family = mvn(d = 2), method= "REML")
 
 #### Build Data frame for a GAM analysis with mgcv package
@@ -371,12 +371,14 @@ mgcvDATA <-mgcvDATA[-1,] # remove the first row containing only "NA"
 mgcvDATA$Ncod     <- scale(mgcvDATA$Ncod)     # z-score the Abundance of Cod
 mgcvDATA$Nhad     <- scale(mgcvDATA$Nhad)     # z-score the Abundance of Haddock
 mgcvDATA$f_Year   <- as.factor(mgcvDATA$Year) # create factor caterogy for Year
+mgcvDATA$f_Size   <- as.factor(mgcvDATA$Size) # create factor caterogy for Year
+
 
 
 #### Run a multivariate GAM model
 require(mgcv)
-SimulGAM <- gam(list(LonH ~ s(Ncod,k=3, bs="ts")+te(LonC,LatC, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re"),
-                     LatH ~ s(Ncod,k=3, bs="ts")+te(LonC,LatC, bs="ts")+s(Nhad,k=3, bs="ts")+s(Size,k=3, bs = "re")+s(Year,k=3, bs = "re")),
+SimulGAM <- gam(list(LonH ~ s(Ncod,k=3, bs="ts")+te(LonC,LatC, bs="ts")+s(Nhad,k=3, bs="ts")+s(f_Size,k=3, bs = "re")+s(f_Year,k=3, bs = "re"),
+                     LatH ~ s(Ncod,k=3, bs="ts")+te(LonC,LatC, bs="ts")+s(Nhad,k=3, bs="ts")+s(f_Size,k=3, bs = "re")+s(f_Year,k=3, bs = "re")),
                      data=mgcvDATA,correlation=corGaus(form=~(CenLon+CenLat)|f_Year), family = mvn(d = 2), method= "REML")
 
 # plot the 
@@ -400,7 +402,8 @@ for(lat in 1:length(latRes)){
                            CenLat= median(mgcvDATA$CenLat,na.rm=T),  
                            Size=median(mgcvDATA$Size,na.rm=T), 
                            Year=median(mgcvDATA$Year,na.rm=T), 
-                           f_Year= as.factor(median(mgcvDATA$Year, na.rm=T)))
+                           f_Year= as.factor(median(mgcvDATA$Year, na.rm=T)),
+                           f_Size= as.factor(median(mgcvDATA$Size, na.rm=T)))                
       predLon <- predict(SimulGAM, newdata)[1]
       predLat <- predict(SimulGAM, newdata)[2]
       # select only the prediction that are inside the space considered
@@ -421,6 +424,7 @@ filled.contour(z,  xlim=c(1,6),ylim=c(1,6), nlevels = 20,
            plot.axes = {axis(1, tcl=-0.5)
                         axis(2,  tcl=-0.5)})
 
+#########
 
 
 
