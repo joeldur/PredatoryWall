@@ -34,6 +34,22 @@ NSGAMmodel <- gam(list(LonHad ~ s(Ncod,k=3, bs="ts")+te(LonCod,LatCod, bs="ts")+
 
 
 # Figure 2
+# general map
+require(maps)
+require(maptools)
+windows(5,5)
+ par(mar=c(5,5,1,1))
+map(xlim = c(-12,50), ylim=c(48,80), fill=T, col="grey")
+ axis(1, seq(-15,50,5), labels=expression("",10~degree~W,"",0~degree,"",10~degree~E,"",20~degree~E,"",30~degree~E,"",40~degree~E,"",50~degree~E),tcl=-0.5)
+ axis(2, seq(50,80,5), labels=expression(50~degree~N,55~degree~N,60~degree~N,65~degree~N,70~degree~N,75~degree~N,80~degree~N), tcl=-0.5, las=2)
+ box()
+
+  text(32,75,expression("Barents Sea"),cex=1.2)
+  text(0, 70,expression(" North
+Atlantic"),col="black",cex=1.2)
+  text(3, 55,expression("North
+ Sea"),col="black",cex=1.2)
+
 # Barents Sea
 windows(5,5)
  par(mar=c(5,5,1,1))
